@@ -15,3 +15,9 @@ console.log(multilineString.charAt(0)); // Output: T
 console.log(multilineString.toUpperCase()); // Output: 
 console.log(multilineString.toLowerCase()); // Output: this is a string
 console.log(multilineString.indexOf("is")); // Output: 2
+let str = multilineString.replace("is", "was");
+console.log(str); // Output: Thwas a string
+console.log(multilineString.slice(0, 4)); // Output: This
+console.log(multilineString.substring(0, 4)); // Output: This
+console.log(multilineString.split(" ")); // Output: [ 'This', 'is', 'a', 'string' ]
+console.log(multilineString.trim()); // Output: This is a string
