@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: lightblue;">
+    <ul class="list">
+        <li>Java Script</li>
+    </ul>
+    
+</body>
+<script>
+    function addElement(langName) {
+        // Create a new list item
+        const newItem = document.createElement("li");
+        newItem.innerHTML = `${langName}`;
+
+        // Append the new item to the existing list
+        const list = document.querySelector(".list");
+        list.appendChild(newItem);
+
+    }
+    addElement("Python");
+    addElement("C++");
+
+
+    function OptimizedAddElement(langName) {
+        // Create a new list item
+        const newItem = document.createElement("li");
+       newItem.appendChild(document.createTextNode(langName));
+        // Append the new item to the existing list
+        const list = document.querySelector(".list").appendChild(newItem);
+    }
+    ["Java", "Ruby", "PHP"].forEach(OptimizedAddElement);
+
+    //EDIT
+   // document.querySelector(".list").children[0].innerHTML = "JavaScript";
+  //  document.querySelector(".list").children[1].textContent = "Python Programming";
+
+//  document.querySelector("list:nth-child(1)").innerHTML = "JavaScript";
+
+const newLang=  document.querySelector("li:nth-child(2)");
+//newLang.innerHTML = "JavaScript";
+   const newILi = document.createElement("li");
+   newILi.textContent = "Android Development";
+   newLang.replaceWith(newILi);
+
+
+   // REMOVE
+   const remLang = document.querySelector("li:nth-child(3)");
+    remLang.remove();
+
+</script>
+</html>
