@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Detail Submission</title>
+  <link rel="stylesheet" href="form.css" />
+  <style>
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Student Detail Submission</h1>
+      <p class="muted">Fill the form and submit. Submissions are saved to your browser (localStorage).</p>
+
+      <form id="studentForm" novalidate>
+        <div id="errorBox" class="error"></div>
+        <div id="successBox" class="success">Student saved.</div>
+
+        <div class="field">
+          <label for="fullName">Full Name *</label>
+          <input id="fullName" name="fullName" type="text" placeholder="e.g., Aisha Verma" required />
+        </div>
+
+        <div class="field">
+          <label for="email">Email *</label>
+          <input id="email" name="email" type="email" placeholder="name@example.com" required />
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone *</label>
+          <input id="phone" name="phone" type="tel" placeholder="10-digit number" pattern="^[0-9]{10}$" required />
+        </div>
+
+        <div class="field">
+          <label for="dob">Date of Birth *</label>
+          <input id="dob" name="dob" type="date" required />
+        </div>
+
+        <div class="field">
+          <label for="gender">Gender *</label>
+          <select id="gender" name="gender" required>
+            <option value="">Select…</option>
+            <option>Female</option>
+            <option>Male</option>
+            <option>Non-binary</option>
+            <option>Prefer not to say</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="course">Course *</label>
+          <select id="course" name="course" required>
+            <option value="">Select…</option>
+            <option>B.Sc Computer Science</option>
+            <option>B.Com</option>
+            <option>B.A.</option>
+            <option>B.Tech</option>
+            <option>MBA</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="year">Year *</label>
+          <select id="year" name="year" required>
+            <option value="">Select…</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="roll">Roll No. *</label>
+          <input id="roll" name="roll" type="text" placeholder="e.g., CS23-045" required />
+        </div>
+
+        <div class="field row-span-2">
+          <label for="address">Address</label>
+          <textarea id="address" name="address" placeholder="Street, City, State, ZIP"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="photo">Photo (optional)</label>
+          <input id="photo" name="photo" type="file" accept="image/*" />
+        </div>
+
+        <div class="actions">
+          <button type="reset" class="btn-secondary">Clear</button>
+          <button type="submit" class="btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="table-wrap">
+      <table id="studentsTable" aria-label="Submitted students">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>DOB</th>
+            <th>Gender</th>
+            <th>Course</th>
+            <th>Year</th>
+            <th>Roll No.</th>
+            <th>Address</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- rows injected by JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Utilities
+    const $ = (id) => document.getElementById(id);
+    const form = $("studentForm");
+    const errorBox = $("errorBox");
+    const successBox = $("successBox");
+    const tableBody = document.querySelector('#studentsTable tbody');
+
+    const STORAGE_KEY = 'students:list:v1';
+
+    const loadStudents = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const saveStudents = (list) => localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+
+    function setMessage(box, msg) {
+      box.textContent = msg;
+      box.style.display = msg ? 'block' : 'none';
+    }
+
+    function clearMessages() {
+      setMessage(errorBox, '');
+      setMessage(successBox, '');
+    }
+
+    function readImageAsDataURL(file) {
+      return new Promise((resolve) => {
+        if (!file) return resolve('');
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result || '');
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderTable() {
+      const students = loadStudents();
+      tableBody.innerHTML = '';
+      if (!students.length) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = 11;
+        td.className = 'muted';
+        td.textContent = 'No submissions yet.';
+        tr.appendChild(td);
+        tableBody.appendChild(tr);
+        return;
+      }
+
+      students.forEach((s, idx) => {
+        const tr = document.createElement('tr');
+        const imgTd = document.createElement('td');
+        imgTd.innerHTML = s.photo ? `<img class="photo-preview" src="${s.photo}" alt="${s.fullName}'s photo" />` : '<span class="muted">—</span>';
+        tr.appendChild(imgTd);
+
+        const cells = [s.fullName, s.email, s.phone, s.dob, s.gender, s.course, s.year, s.roll, s.address || '—'];
+        cells.forEach(v => {
+          const td = document.createElement('td');
+          td.textContent = v;
+          tr.appendChild(td);
+        });
+
+        const actions = document.createElement('td');
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'Delete';
+        delBtn.className = 'btn-secondary';
+        delBtn.style.padding = '.4rem .7rem';
+        delBtn.style.borderRadius = '999px';
+        delBtn.addEventListener('click', () => {
+          const list = loadStudents();
+          list.splice(idx, 1);
+          saveStudents(list);
+          renderTable();
+        });
+
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.className = 'btn-primary';
+        editBtn.style.marginRight = '.5rem';
+        editBtn.style.padding = '.4rem .7rem';
+        editBtn.style.borderRadius = '999px';
+        editBtn.addEventListener('click', () => fillFormForEdit(idx));
+
+        actions.appendChild(editBtn);
+        actions.appendChild(delBtn);
+        tr.appendChild(actions);
+
+        tableBody.appendChild(tr);
+      });
+    }
+
+    function fillFormForEdit(index) {
+      const s = loadStudents()[index];
+      if (!s) return;
+      form.dataset.editIndex = index;
+      $("fullName").value = s.fullName;
+      $("email").value = s.email;
+      $("phone").value = s.phone;
+      $("dob").value = s.dob;
+      $("gender").value = s.gender;
+      $("course").value = s.course;
+      $("year").value = s.year;
+      $("roll").value = s.roll;
+      $("address").value = s.address || '';
+      // Photo not refilled for security; keep existing unless user uploads new
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setMessage(successBox, 'Editing mode: update fields and Submit to save changes.');
+    }
+
+    function validate() {
+      const errors = [];
+      const requiredIds = ['fullName', 'email', 'phone', 'dob', 'gender', 'course', 'year', 'roll'];
+      requiredIds.forEach(id => {
+        const el = $(id);
+        if (!el.value || (el.validity && !el.validity.valid)) {
+          errors.push(`${el.previousElementSibling?.innerText?.replace(' *','')} is invalid or missing.`);
+        }
+      });
+
+      const phone = $("phone").value.trim();
+      if (phone && !/^[0-9]{10}$/.test(phone)) {
+        errors.push('Phone must be exactly 10 digits.');
+      }
+
+      const email = $("email").value.trim();
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errors.push('Email format is invalid.');
+      }
+
+      return errors;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearMessages();
+
+      const errors = validate();
+      if (errors.length) {
+        setMessage(errorBox, errors.join(' '));
+        return;
+      }
+
+      const data = new FormData(form);
+      const photoFile = data.get('photo');
+      const photoDataURL = photoFile && photoFile.size ? await readImageAsDataURL(photoFile) : '';
+
+      const student = {
+        fullName: data.get('fullName').toString().trim(),
+        email: data.get('email').toString().trim(),
+        phone: data.get('phone').toString().trim(),
+        dob: data.get('dob').toString(),
+        gender: data.get('gender').toString(),
+        course: data.get('course').toString(),
+        year: data.get('year').toString(),
+        roll: data.get('roll').toString().trim(),
+        address: data.get('address')?.toString().trim() || '',
+        photo: photoDataURL
+      };
+
+      const list = loadStudents();
+      const editIndex = form.dataset.editIndex;
+      if (editIndex !== undefined) {
+        // Keep old photo if no new upload
+        if (!student.photo && list[editIndex]?.photo) student.photo = list[editIndex].photo;
+        list[Number(editIndex)] = student;
+        delete form.dataset.editIndex;
+        setMessage(successBox, 'Student updated.');
+      } else {
+        list.push(student);
+        setMessage(successBox, 'Student saved.');
+      }
+
+      saveStudents(list);
+      renderTable();
+      form.reset();
+    });
+
+    form.addEventListener('reset', () => {
+      delete form.dataset.editIndex;
+      clearMessages();
+    });
+
+    // Bootstrap
+    renderTable();
+  </script>
+</body>
+</html>

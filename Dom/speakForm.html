@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Voice Enabled Student Form</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    .status { margin-top: 1rem; font-weight: bold; color: #2563eb; }
+    input, select { padding: .5rem; margin: .3rem 0; width: 250px; }
+    button { padding: .5rem 1rem; border: none; background: #2563eb; color: white; border-radius: 6px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Student Detail Submission (Voice Assistant)</h1>
+  <form id="studentForm">
+    <input id="fullName" name="fullName" type="text" placeholder="Full Name" required><br>
+    <input id="email" name="email" type="email" placeholder="Email" required><br>
+    <input id="phone" name="phone" type="tel" placeholder="Phone" required pattern="[0-9]{10}"><br>
+    <input id="dob" name="dob" type="date" required><br>
+    <select id="gender" name="gender" required>
+      <option value="">Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select><br>
+    <input id="course" name="course" type="text" placeholder="Course" required><br>
+    <input id="year" name="year" type="number" placeholder="Year" required min="1"><br>
+    <input id="roll" name="roll" type="text" placeholder="Roll No." required><br>
+    <textarea id="address" name="address" placeholder="Address"></textarea><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <p class="status" id="status">Press Start and follow voice prompts.</p>
+  <button id="startBtn">🎤 Start Voice Input</button>
+
+  <script>
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const form = document.getElementById("studentForm");
+    const status = document.getElementById("status");
+    const fields = [
+      { id: "fullName", prompt: "Please say your full name" },
+      { id: "email", prompt: "Please say your email" },
+      { id: "phone", prompt: "Please say your 10 digit phone number" },
+      { id: "dob", prompt: "Please say your date of birth in year month day format" },
+      { id: "gender", prompt: "Please say your gender male, female or other" },
+      { id: "course", prompt: "Please say your course" },
+      { id: "year", prompt: "Please say your year of study" },
+      { id: "roll", prompt: "Please say your roll number" },
+      { id: "address", prompt: "Please say your address" }
+    ];
+
+    let recognition, currentField = 0;
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript.trim();
+        const field = fields[currentField];
+        const input = document.getElementById(field.id);
+
+        // Special handling for DOB (convert spoken to date)
+        if (field.id === "dob") {
+          let parts = transcript.split(" ");
+          if (parts.length >= 3) {
+            let [year, month, day] = parts;
+            let dateStr = `${year}-${month.padStart(2,"0")}-${day.padStart(2,"0")}`;
+            input.value = dateStr;
+          }
+        } else {
+          input.value = transcript;
+        }
+
+        currentField++;
+        if (currentField < fields.length) {
+          askNext();
+        } else {
+          status.textContent = "All fields filled. Submitting form...";
+          form.requestSubmit();
+        }
+      };
+
+      recognition.onerror = (e) => {
+        status.textContent = "Error: " + e.error;
+      };
+    }
+
+    function askNext() {
+      const field = fields[currentField];
+      status.textContent = field.prompt;
+      recognition.start();
+    }
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      currentField = 0;
+      askNext();
+    });
+
+    // Handle submit (replace with your saving logic)
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      status.textContent = "✅ Form submitted successfully!";
+      alert("Form submitted with voice input!");
+    });
+  </script>
+</body>
+</html>
