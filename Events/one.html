@@ -8,26 +8,49 @@
 <body>
     <button id="clickBtn">Click Me</button>
     <input type="text" id="inputBox" placeholder="Type something..." />
+ <div>
+        <ul class="items" id="items">
+            <li class="item1" id="item1">Item 1</li>
+            <li class="item2" id="item2">Item 2</li>
+            <li class="item3" id="item3">Item 3</li>
+            <li class="item4" id="item4">Item 4</li>
+            <li class="item5" id="item5">Item 5</li>
+            <li><a href="https://www.angelone.in/trade/watchlist/chart" target="_blank">angelone</a></li>
+        </ul>
+        </div>
+       
+    
 
-    <script>
+<script>
         // Click event
         document.getElementById('clickBtn').addEventListener('click', function() {
             alert('Button was clicked!');
         });
 
         // Input event
-        document.getElementById('inputBox').addEventListener('input', function(e) {
-            console.log('Input changed to:', e.target.value);
-        });
+        // document.getElementById("item1").addEventListener("click", function(event) {
+        // console.log(event);
+        // console.log('cliecked on item 1 ');
+        // event.stopPropagation(); // to stop the event bubbling
+        // alert("Item 1 clicked!");   
+        // });
+        //  document.getElementById("items").addEventListener("click", function(event) {
+        // console.log(event);
+        // console.log('cliecked inside the item s List  ');
+        // alert("Item 1 clicked!");   
+        // });
 
-        // Mouseover event
-        document.getElementById('clickBtn').addEventListener('mouseover', function() {
-            this.style.backgroundColor = 'lightblue';
-        });
+        // when we click on item 1 it will also trigger the event of items because of event bubbling
+        // to avoid this we use event.stopPropagation() 
+        
 
-        document.getElementById('clickBtn').addEventListener('mouseout', function() {
-            this.style.backgroundColor = '';
-        });
+        document.querySelector('#items').addEventListener('click', function(event) {
+            
+                console.log(event.target);
+                let li = event.target;
+               li.remove();
+            
+        },false);
     </script>
-</body>
+    </body>
 </html>
