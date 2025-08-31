@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    const url="https://api.github.com/users/DishendraSingh";
+    // fetch(url).then((response)=>{
+    //     return response.json();
+    // }).then((data)=>{
+    //     console.log(data);
+    // }).catch((error)=>{
+    //     console.log(error);
+    // })
+///////////////////////////////////////////////////////////
+    // async function getData(){
+    //     const response=await fetch(url);
+    //     const data=await response.json();
+    //     console.log(data);
+    // }
+    // getData();
+
+///////////////////////////////////////////////////////////
+
+const xhr=new XMLHttpRequest();
+xhr.open("GET",url);
+xhr.onreadystatechange=function(){
+    if(xhr.readyState===4){
+        console.log(xhr.readyState);
+        const dataa=this.responseText;
+        const data=JSON.parse(xhr.response);
+        console.log(dataa);
+        console.log(data);
+    }
+}
+xhr.send();
+
+</script>
+</html>
