@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(120deg, #e0eaff 0%, #f8f9fa 100%);
+            margin: 0;
+            min-height: 100vh;
+        }
+        nav {
+            background: #0077ff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        nav ul {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 16px 0;
+        }
+        nav a:hover {
+            background: #005bb5;
+        }
+        #insert {
+            background: #fff;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 32px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #0077ff;
+            margin-bottom: 16px;
+        }
+        p {
+            color: #333;
+            margin-bottom: 12px;
+        }
+        .key {
+            margin-top: 24px;
+            padding: 16px;
+            background: #f0f4ff;
+            border-radius: 8px;
+            color: #444;
+            font-size: 1.1em;
+            min-height: 40px;
+        }
+        @media (max-width: 700px) {
+            #insert {
+                padding: 16px 8px;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+                padding: 8px 0;
+            }
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+    <nav>
+        <ul style="list-style: none; display: flex; gap: 20px; padding: 0; margin: 0;">
+            <li><a href="../index.html" style="text-decoration: none; color: #fff; background: #0077ff; padding: 8px 16px; border-radius: 4px; transition: background 0.3s;">Home</a></li>
+            <li><a href="colorchanging.html" style="text-decoration: none; color: #fff; background: #0077ff; padding: 8px 16px; border-radius: 4px; transition: background 0.3s;">Color Changing</a></li>
+            <li><a href="three.html" style="text-decoration: none; color: #fff; background: #0077ff; padding: 8px 16px; border-radius: 4px; transition: background 0.3s;">Three</a></li>
+            <li><a href="windoweventlister.html" style="text-decoration: none; color: #fff; background: #0077ff; padding: 8px 16px; border-radius: 4px; transition: background 0.3s;">Window Event Lister</a></li>
+        </ul>
+
+    </nav>
+
+    <div id="insert">
+        <h1>Window Event Lister</h1>
+        <p>Open the console to see the events</p>
+        <p>Try resizing the window, scrolling, and clicking anywhere in the window.</p>
+        <div class="key"></div>
+    </div>
+    
+</body>
+<script src="windoweventlisterner.js">
+    
+</script>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Dishendra is Leaning JavaScript to become Millanior</h1>
+    <button id="btn">Click Me</button>
+    
+</body>
+<script>
+
+   
+    const h1 = document.querySelector('h1');
+    const changeBK=function(){
+        h1.style.color='red';
+        h1.style.backgroundColor='black';
+        h1.style.padding='20px';
+        h1.style.textAlign='center';
+    }
+    const dis = function()
+    {
+        console.log('Dishendra singh')
+    }
+    const chngebanner=function(){
+        h1.textContent='Dishendra is now a Millanior'
+    }
+    setTimeout(() => {
+        changeBK();
+        dis();
+    
+    }, 2000);
+const breaktimer =  setTimeout(() => {
+        chngebanner();
+    }, 4000);
+ const btn = document.querySelector('#btn').addEventListener('click',function(){
+   console.log('You clicked the button');
+    clearTimeout(breaktimer);
+ });
+</script>
+</html>

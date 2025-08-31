@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Back Groud color change project</title>
+</head>
+<body>
+    <h1>Back Grounf Color  changing Project</h1>
+    <button id="stop" class="stop">Stop</button>
+    <button id="start" class="start">Start</button>
+    
+</body>
+<script>
+const hh1 = document.querySelector("h1");
+const body = document.querySelector("body");
+const startinterval = function(){
+    body.style.backgroundColor = `rgb(${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)})`;
+hh1.style.color = `rgb(${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)},${Math.floor(Math.random()*256)})`;
+    console.log("Hello World",Date.now());
+}
+//    setInterval(() => {
+//    startinterval();
+//    }, 1000);
+
+   let intervalId;
+
+   document.querySelector("#start").addEventListener("click", function() {
+       if (!intervalId) {
+           intervalId = setInterval(() => {
+               startinterval();
+           }, 1000);
+       }
+   });
+
+   document.querySelector("#stop").addEventListener("click", function() {
+       console.log("Stop Clicked");
+       clearInterval(intervalId);
+       intervalId = null;
+   });
+
+   // clearInterval(startinterval);
+</script>
+</html>
